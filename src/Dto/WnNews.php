@@ -87,7 +87,7 @@ class WnNews {
 		$entry->setTitle($this->getTitle());
 		$entry->setUrl($this->url);
 		$entry->setDescription($this->getDescription());
-		$entry->setDate($this->getDate()->format("y-m-d h:i:s"));
+		$entry->setDate($this->getDate()->format("Y-m-d h:i:s"));
 		return $entry;
 	}
 
