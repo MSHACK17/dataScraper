@@ -9,6 +9,11 @@ class Entry {
 	public $name;
 
 	/**
+	 * @var []
+	 */
+	public $type;
+
+	/**
 	 * @var string
 	 */
 	public $url;
@@ -59,4 +64,26 @@ class Entry {
 	public function setAddress($address) {
 		$this->address = $address;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * @param [] $types
+	 */
+	public function setType($types) {
+		$this->type = $types;
+	}
+
+	/**
+	 * @param $type
+	 */
+	public function addType($type){
+		$this->type[] = $type;
+	}
+
 }

@@ -12,6 +12,11 @@ class WnEvent {
 	/**
 	 * @var string
 	 */
+	protected $url;
+
+	/**
+	 * @var string
+	 */
 	protected $name;
 
 	/**
@@ -125,6 +130,20 @@ class WnEvent {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getUrl() {
+		return $this->url;
+	}
+
+	/**
+	 * @param string $url
+	 */
+	public function setUrl($url) {
+		$this->url = $url;
+	}
+
+	/**
 	 * Converts the current object to a valid geo object and returns it
 	 *
 	 * @return Entry
@@ -132,7 +151,8 @@ class WnEvent {
 	public function transformToGeoData(){
 		$entry = new Entry();
 		$entry->setName($this->getName());
-		$entry->setUrl("");
+		$entry->setUrl($this->url);
+		$entry->setType($this->getCategory());
 
 		$geo = new Geo();
 		$geo->setLat($this->getCoordinates()->getLatitude());

@@ -72,7 +72,9 @@ class WnScraper {
 				$detailContent = $this->fetchContent($detailUrl);
 				$detailHtml = $this->extractDetailContent($detailContent);
 
-				$allObjects[] = $this->getObjectFromDetailContent($detailHtml);
+				$wnEvent = $this->getObjectFromDetailContent($detailHtml);
+				$wnEvent->setUrl($detailUrl);
+				$allObjects[] = $wnEvent;
 				$count++;
 
 				if ($count > 2){
