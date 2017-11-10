@@ -9,6 +9,7 @@
     ],
     "require": {
         "guzzle/guzzle": "^3.9",
-        "symfony/console": "^3.3"
+        "symfony/console": "^3.3",
+        "soundasleep/html2text": "^0.5.0"
     }
 }
