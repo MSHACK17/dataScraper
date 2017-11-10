@@ -13,7 +13,7 @@ class ScrapeWnCommand extends Command {
 
 	protected function configure() {
 		$this
-			->setName('scrape:wn')
+			->setName('scrape:events')
 			->setDescription('Scrapes WN event data')
 		;
 	}
