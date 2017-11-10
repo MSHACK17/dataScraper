@@ -5,8 +5,45 @@ use MSHACK\DataScraper\Dto\WnEvent;
 use MSHACK\DataScraper\Services\GeoCoder;
 
 class WnScraper {
-	protected $baseUrl = "http://termine.wn.de/suche/?query=new&ort=M%C3%BCnster&details_open=&suchtext=&categories[]=-1&day_from=10&month_from=11&year_from=2017&day_to=10&month_to=11&year_to=2017";
 
+	protected $baseUrl = "http://termine.wn.de/suche.php?pagerId=pgr2&nav=pos&pos=###PAGEID###&ort=M%C3%BCnster&suchtext=&day_from=###DAY_FROM###&month_from=###MONTH_FROM###&year_from=###YEAR_FROM###&day_to=###DAY_TO###&month_to=###MONTH_TO###&year_to=###YEAR_TO###&categories[]=-1";
+
+	private function getUrl($pageId = 0){
+		$dateTomorrow = new \DateTime();
+		$dateTomorrow->modify("+1 day");
+		$dateToday = new \DateTime();
+		$url = $this->baseUrl;
+		$parsedUrl = str_replace(
+			[
+				"###PAGEID###",
+			    "###DAY_FROM###",
+			    "###DAY_TO###",
+			    '###MONTH_FROM###',
+			    '###MONTH_TO###',
+			    '###YEAR_FROM###',
+			    '###YEAR_TO###'
+			],
+			[
+				$pageId,
+			    $dateToday->format("d"),
+				$dateTomorrow->format("d"),
+			    $dateToday->format("m"),
+				$dateTomorrow->format("m"),
+			    $dateToday->format("Y"),
+				$dateTomorrow->format("Y"),
+			], $url);
+
+		return $parsedUrl;
+	}
+
+	private function getAllPageSites($baseUrl) {
+		$matches = [];
+		$content = $this->fetchContent($baseUrl);
+		preg_match_all('/pos=(\d)/', $content, $matches);
+
+		$allPageIds = array_unique($matches[1]);
+		return $allPageIds;
+	}
 
 	protected function fetchContent ($url){
 		$httpClient = new \Guzzle\Http\Client();
@@ -60,10 +97,26 @@ class WnScraper {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getData(){
-		$count= 0;
 		$allObjects = [];
-		$content = $this->fetchContent($this->baseUrl);
+
+		$allPageSites = $this->getAllPageSites($this->getUrl());
+
+		foreach ($allPageSites as $pageSite){
+			$objectsForPage = $this->getDataForPage($pageSite);
+			if (count($objectsForPage) > 0){
+				$allObjects = array_merge($objectsForPage, $allObjects);
+			}
+		}
+		return $allObjects;
+	}
+
+	public function getDataForPage($pageId){
+		$allObjects = [];
+		$content = $this->fetchContent($this->getUrl($pageId));
 		$eventIds = $this->getEventIdsFromContent($content);
 
 		foreach ($eventIds as $eventId){
@@ -75,16 +128,12 @@ class WnScraper {
 				$wnEvent = $this->getObjectFromDetailContent($detailHtml);
 				$wnEvent->setUrl($detailUrl);
 				$allObjects[] = $wnEvent;
-				$count++;
-
-				if ($count > 2){
-					$this->initializeGeoCoordinates($allObjects);
-					return $allObjects;
-				}
 			}catch (\Exception $ex){
 				//TODO:
 			}
 		}
+		$this->initializeGeoCoordinates($allObjects);
+		return $allObjects;
 	}
 
 	/**
@@ -93,9 +142,14 @@ class WnScraper {
 	protected function initializeGeoCoordinates(&$wnEvents){
 		$geoCoder = new GeoCoder();
 		/** @var WnEvent $event */
-		foreach ($wnEvents as &$event){
+		foreach ($wnEvents as $key => &$event){
 			$coordinates = $geoCoder->getCoordinates($event->getAddress());
-			$event->setCoordinates($coordinates);
+			if (!is_null($coordinates)){
+				$event->setCoordinates($coordinates);
+			}else{
+				//remove events where coordinates could not be retrieved
+				unset($wnEvents[$key]);
+			}
 		}
 	}
 

@@ -29,5 +29,7 @@ class ScrapeCommand extends Command {
 			$es = new ElasticSearch();
 			$es->transferToIndex($geodata);
 		}
+
+		$output->writeln(count($wnEvents)." events successfully imported to elestic search");
 	}
 }
