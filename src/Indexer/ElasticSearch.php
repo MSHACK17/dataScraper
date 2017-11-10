@@ -3,18 +3,18 @@
 namespace MSHACK\DataScraper\Indexer;
 
 use Guzzle\Http\Client;
-use MSHACK\DataScraper\GeoData\Entry;
 
 class ElasticSearch {
-	protected $url = "https://elasticsearch.codeformuenster.org/stadtteil_events/event";
+	protected $url = "https://elasticsearch.codeformuenster.org/###TYPE###";
 
 	/**
 	 * Indexes the given geo object to the elastic search index
-	 * @param Entry $entry
+	 * @param $entry
 	 */
-	public function transferToIndex($entry){
+	public function transferToIndex($entry, $type){
+		$typedUrl = str_replace("###TYPE###", $type, $this->url);
 		$guzzle = new Client();
-		$request = $guzzle->post($this->url,
+		$request = $guzzle->post($typedUrl,
 		[
 			'content-type' => 'application/json'
 		]);

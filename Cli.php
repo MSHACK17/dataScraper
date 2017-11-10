@@ -10,7 +10,9 @@ $application = new Application();
 
 // ... register commands
 
-$scrape = new \MSHACK\DataScraper\Commands\ScrapeCommand();
+$scrapeWn = new \MSHACK\DataScraper\Commands\ScrapeWnCommand();
+$scrapeNews = new \MSHACK\DataScraper\Commands\ScrapeNewsCommand();
 
-$application->add($scrape);
+$application->add($scrapeWn);
+$application->add($scrapeNews);
 $application->run();

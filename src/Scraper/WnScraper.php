@@ -4,7 +4,7 @@ namespace MSHACK\DataScraper\Scraper;
 use MSHACK\DataScraper\Dto\WnEvent;
 use MSHACK\DataScraper\Services\GeoCoder;
 
-class WnScraper {
+class WnScraper extends BaseScraper {
 	protected $debug = FALSE;
 	protected $baseUrl = "http://termine.wn.de/suche.php?pagerId=pgr2&nav=pos&pos=###PAGEID###&ort=M%C3%BCnster&suchtext=&day_from=###DAY_FROM###&month_from=###MONTH_FROM###&year_from=###YEAR_FROM###&day_to=###DAY_TO###&month_to=###MONTH_TO###&year_to=###YEAR_TO###&categories[]=-1";
 
@@ -43,14 +43,6 @@ class WnScraper {
 
 		$allPageIds = array_unique($matches[1]);
 		return $allPageIds;
-	}
-
-	protected function fetchContent ($url){
-		$httpClient = new \Guzzle\Http\Client();
-		$request = $httpClient->get($url);
-		$response = $request->send();
-		$htmlContent = $response->getBody(true);
-		return $htmlContent;
 	}
 
 	protected function getDetailUrlForEventId($eventId){

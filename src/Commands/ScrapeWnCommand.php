@@ -9,7 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ScrapeCommand extends Command {
+class ScrapeWnCommand extends Command {
 
 	protected function configure() {
 		$this
@@ -27,7 +27,7 @@ class ScrapeCommand extends Command {
 			$geodata = $event->transformToGeoData();
 
 			$es = new ElasticSearch();
-			$es->transferToIndex($geodata);
+			$es->transferToIndex($geodata, "stadtteil_events/event");
 		}
 
 		$output->writeln(count($wnEvents)." events successfully imported to elestic search");
