@@ -5,7 +5,7 @@ use MSHACK\DataScraper\Dto\WnEvent;
 use MSHACK\DataScraper\Services\GeoCoder;
 
 class WnScraper {
-	protected $debug = TRUE;
+	protected $debug = FALSE;
 	protected $baseUrl = "http://termine.wn.de/suche.php?pagerId=pgr2&nav=pos&pos=###PAGEID###&ort=M%C3%BCnster&suchtext=&day_from=###DAY_FROM###&month_from=###MONTH_FROM###&year_from=###YEAR_FROM###&day_to=###DAY_TO###&month_to=###MONTH_TO###&year_to=###YEAR_TO###&categories[]=-1";
 
 	private function getUrl($pageId = 0){
@@ -85,7 +85,13 @@ class WnScraper {
 		$wnEvent->setCategory($category);
 		$wnEvent->setAddress($address);
 		$wnEvent->setDistrict($district);
+
+		$this->parseAddres($address);
 		return $wnEvent;
+	}
+
+	protected function parseAddres($addressString){
+		echo "hallo";
 	}
 
 	protected function getRegexResult($content, $regex){
