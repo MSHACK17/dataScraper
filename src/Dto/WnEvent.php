@@ -152,8 +152,9 @@ class WnEvent {
 		$entry = new Entry();
 		$entry->setName($this->getName());
 		$entry->setUrl($this->url);
-		$entry->setType($this->getCategory());
-		$entry->setDate($this->getDate()->format("d.m.Y"));
+		$entry->addTag($this->getCategory());
+		$entry->setDateStart($this->getDate()->format("d.m.Y"));
+		$entry->setDateEnd($this->getDate()->format("d.m.Y"));
 
 		$geo = new Geo();
 		$geo->setLat($this->getCoordinates()->getLatitude());
