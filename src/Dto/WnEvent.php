@@ -161,6 +161,7 @@ class WnEvent {
 		$geo->setLon($this->getCoordinates()->getLongitude());
 
 		$address = new Address();
+		$address->setDistrict($this->getDistrict());
 		$address->setGeo($geo);
 		$entry->setAddress($address);
 
