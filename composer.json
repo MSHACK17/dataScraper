@@ -1,0 +1,14 @@
+{
+    "name": "mshack/data-scraper",
+    "description": "Data scraper component",
+    "authors": [
+        {
+            "name": "Uwe Trotzek",
+            "email": "trotzek@citeq.de"
+        }
+    ],
+    "require": {
+        "guzzle/guzzle": "^3.9",
+        "symfony/console": "^3.3"
+    }
+}
