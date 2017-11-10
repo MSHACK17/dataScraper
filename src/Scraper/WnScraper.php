@@ -85,14 +85,9 @@ class WnScraper {
 		$wnEvent->setCategory($category);
 		$wnEvent->setAddress($address);
 		$wnEvent->setDistrict($district);
-
-		$this->parseAddres($address);
 		return $wnEvent;
 	}
 
-	protected function parseAddres($addressString){
-		echo "hallo";
-	}
 
 	protected function getRegexResult($content, $regex){
 		$matches = [];
@@ -153,9 +148,13 @@ class WnScraper {
 		$geoCoder = new GeoCoder();
 		/** @var WnEvent $event */
 		foreach ($wnEvents as $key => &$event){
-			$coordinates = $geoCoder->getCoordinates($event->getAddress());
-			if (!is_null($coordinates)){
-				$event->setCoordinates($coordinates);
+			$geoCodedObject = $geoCoder->getCoordinates($event->getAddress());
+			if (!is_null($geoCodedObject)){
+				$street = $geoCodedObject->getStreetName()." ".$geoCodedObject->getStreetNumber();
+				$event->setCoordinates($geoCodedObject->getCoordinates());
+				$event->setStreet($street);
+				$event->setZip($geoCodedObject->getPostalCode());
+				$event->setCity($geoCodedObject->getLocality());
 			}else{
 				//remove events where coordinates could not be retrieved
 				unset($wnEvents[$key]);

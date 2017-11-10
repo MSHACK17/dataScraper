@@ -20,7 +20,7 @@ class GeoCoder {
 	public function getCoordinates($addressString){
 		try {
 			$geocode = $this->geocoder->geocode($addressString);
-			return $geocode->first()->getCoordinates();
+			return $geocode->first();
 		} catch (\Exception $e) {
 			//TODO:
 		}
