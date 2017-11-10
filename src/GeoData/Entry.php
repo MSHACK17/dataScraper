@@ -24,6 +24,11 @@ class Entry {
 	public $address;
 
 	/**
+	 * @var string
+	 */
+	public $date;
+
+	/**
 	 * @return string
 	 */
 	public function getName() {
@@ -86,4 +91,17 @@ class Entry {
 		$this->type[] = $type;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getDate() {
+		return $this->date;
+	}
+
+	/**
+	 * @param string $date
+	 */
+	public function setDate($date) {
+		$this->date = $date;
+	}
 }
