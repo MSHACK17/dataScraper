@@ -2,6 +2,7 @@
 namespace MSHACK\DataScraper\Scraper;
 
 use MSHACK\DataScraper\Dto\WnEvent;
+use MSHACK\DataScraper\Services\GeoCoder;
 
 class WnScraper {
 	protected $baseUrl = "http://termine.wn.de/suche/?query=new&ort=M%C3%BCnster&details_open=&suchtext=&categories[]=-1&day_from=10&month_from=11&year_from=2017&day_to=10&month_to=11&year_to=2017";
@@ -74,12 +75,25 @@ class WnScraper {
 				$allObjects[] = $this->getObjectFromDetailContent($detailHtml);
 				$count++;
 
-				if ($count > 5){
+				if ($count > 2){
+					$this->initializeGeoCoordinates($allObjects);
 					return $allObjects;
 				}
 			}catch (\Exception $ex){
 				//TODO:
 			}
+		}
+	}
+
+	/**
+	 * @param WnEvent[] $wnEvents
+	 */
+	protected function initializeGeoCoordinates(&$wnEvents){
+		$geoCoder = new GeoCoder();
+		/** @var WnEvent $event */
+		foreach ($wnEvents as &$event){
+			$coordinates = $geoCoder->getCoordinates($event->getAddress());
+			$event->setCoordinates($coordinates);
 		}
 	}
 

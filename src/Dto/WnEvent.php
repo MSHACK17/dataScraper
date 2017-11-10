@@ -2,6 +2,11 @@
 
 namespace MSHACK\DataScraper\Dto;
 
+use Geocoder\Model\Coordinates;
+use MSHACK\DataScraper\GeoData\Address;
+use MSHACK\DataScraper\GeoData\Entry;
+use MSHACK\DataScraper\GeoData\Geo;
+
 class WnEvent {
 
 	/**
@@ -28,6 +33,11 @@ class WnEvent {
 	 * @var string
 	 */
 	protected $category;
+
+	/**
+	 * @var []
+	 */
+	protected $coordinates;
 
 	/**
 	 * @return string
@@ -98,5 +108,40 @@ class WnEvent {
 	 */
 	public function setCategory($category) {
 		$this->category = $category;
+	}
+
+	/**
+	 * @return Coordinates
+	 */
+	public function getCoordinates() {
+		return $this->coordinates;
+	}
+
+	/**
+	 * @param mixed $coordinates
+	 */
+	public function setCoordinates($coordinates) {
+		$this->coordinates = $coordinates;
+	}
+
+	/**
+	 * Converts the current object to a valid geo object and returns it
+	 *
+	 * @return Entry
+	 */
+	public function transformToGeoData(){
+		$entry = new Entry();
+		$entry->setName($this->getName());
+		$entry->setUrl("");
+
+		$geo = new Geo();
+		$geo->setLat($this->getCoordinates()->getLatitude());
+		$geo->setLon($this->getCoordinates()->getLongitude());
+
+		$address = new Address();
+		$address->setGeo($geo);
+		$entry->setAddress($address);
+
+		return $entry;
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace MSHACK\DataScraper\Commands;
 
+use MSHACK\DataScraper\Dto\WnEvent;
+use MSHACK\DataScraper\Indexer\ElasticSearch;
 use MSHACK\DataScraper\Scraper\WnScraper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,5 +21,13 @@ class ScrapeCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$wnScraper = new WnScraper();
 		$wnEvents = $wnScraper->getData();
+
+		/** @var WnEvent $event */
+		foreach ($wnEvents as $event){
+			$geodata = $event->transformToGeoData();
+
+			$es = new ElasticSearch();
+			$es->transferToIndex($geodata);
+		}
 	}
 }
