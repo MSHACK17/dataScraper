@@ -29,6 +29,6 @@ class ScrapeWnCommand extends Command {
 			$es->transferToIndex($geodata, "places/place");
 		}
 
-		$output->writeln(count($wnEvents)." events successfully imported to elestic search");
+		$output->writeln(count($wnEvents)." events successfully imported to elastic search");
 	}
 }

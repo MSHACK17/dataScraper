@@ -33,6 +33,6 @@ class ScrapeNewsCommand extends Command {
 			$es->transferToIndex($geodata, "news/news");
 		}
 
-		$output->writeln(count($allNews)." news successfully imported to elestic search");
+		$output->writeln(count($allNews)." news successfully imported to elastic search");
 	}
 }
