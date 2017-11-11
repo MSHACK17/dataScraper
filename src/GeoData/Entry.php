@@ -11,7 +11,7 @@ class Entry {
 	/**
 	 * @var []
 	 */
-	public $tags;
+	public $properties;
 
 	/**
 	 * @var string
@@ -32,6 +32,11 @@ class Entry {
 	 * @var string
 	 */
 	public $date_end;
+
+	/**
+	 * @var string
+	 */
+	public $type;
 
 
 	/**
@@ -79,22 +84,22 @@ class Entry {
 	/**
 	 * @return mixed
 	 */
-	public function getTags() {
-		return $this->tags;
+	public function getProperties() {
+		return $this->properties;
 	}
 
 	/**
 	 * @param [] $types
 	 */
-	public function setTags($types) {
-		$this->tags = $types;
+	public function setProperties($types) {
+		$this->properties = $types;
 	}
 
 	/**
 	 * @param $type
 	 */
-	public function addTag($type){
-		$this->tags[] = $type;
+	public function addProperty($key, $value){
+		$this->properties[$key] = $value;
 	}
 
 	/**
@@ -123,5 +128,19 @@ class Entry {
 	 */
 	public function setDateEnd($date_end) {
 		$this->date_end = $date_end;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * @param string $type
+	 */
+	public function setType($type) {
+		$this->type = $type;
 	}
 }

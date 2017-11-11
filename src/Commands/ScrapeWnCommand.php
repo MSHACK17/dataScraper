@@ -19,15 +19,14 @@ class ScrapeWnCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		$es = new ElasticSearch();
 		$wnScraper = new WnScraper();
 		$wnEvents = $wnScraper->getData();
 
 		/** @var WnEvent $event */
 		foreach ($wnEvents as $event){
 			$geodata = $event->transformToGeoData();
-
-			$es = new ElasticSearch();
-			$es->transferToIndex($geodata, "stadtteil_events/event");
+			$es->transferToIndex($geodata, "places/place");
 		}
 
 		$output->writeln(count($wnEvents)." events successfully imported to elestic search");
