@@ -12,7 +12,9 @@ $application = new Application();
 
 $scrapeWn = new \MSHACK\DataScraper\Commands\ScrapeWnCommand();
 $scrapeNews = new \MSHACK\DataScraper\Commands\ScrapeNewsCommand();
+$scrapeCams = new \MSHACK\DataScraper\Commands\ScrapeWebCamsCommand();
 
 $application->add($scrapeWn);
 $application->add($scrapeNews);
+$application->add($scrapeCams);
 $application->run();
